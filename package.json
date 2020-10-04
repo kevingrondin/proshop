@@ -1,10 +1,17 @@
 {
   "name": "proshop",
   "version": "1.0.0",
-  "description": "",
+  "description": "MERN shopping cart app",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend/server",
+    "server": "nodemon backend/server",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "kevin grondin",
   "license": "MIT",
@@ -18,5 +25,9 @@
     "mongoose": "^5.10.7",
     "morgan": "^1.10.0",
     "multer": "^1.4.2"
+  },
+  "devDependencies": {
+    "concurrently": "^5.3.0",
+    "nodemon": "^2.0.4"
   }
 }
