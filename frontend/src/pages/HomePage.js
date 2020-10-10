@@ -1,25 +1,32 @@
 import React, {useContext, useEffect} from 'react'
+import { NavLink, useParams } from "react-router-dom"
 import Meta from '../components/Meta'
 import Loader from '../components/Loader'
 import { Row, Col } from 'react-bootstrap'
+import Paginate from '../components/Paginate'
 import Product from '../components/Product'
 import ProductCarousel from '../components/ProductCarousel'
 
 import { ProductContext } from "../context/ProductContext"
 
 const HomePage = () => {
-  const { loadingProduct, products, getProducts } = useContext(ProductContext)
-
+  const { keyword } = useParams()
+  const { loadingProducts, products, getProducts, pages, page } = useContext(ProductContext)
+  
   useEffect(() => {
-    getProducts()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    getProducts(keyword)
+  }, [keyword]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
       <Meta />
-      <ProductCarousel />
+      {!keyword ? <ProductCarousel /> : (
+        <NavLink to='/' className='btn btn-light'>
+          Go Back
+        </NavLink>
+      )}
       <h1>Latest Products</h1>
-      {loadingProduct ? (
+      {loadingProducts ? (
         <Loader />
       ) : (
         <>
@@ -30,11 +37,11 @@ const HomePage = () => {
               </Col>
             ))}
           </Row>
-          {/* <Paginate
+          <Paginate
             pages={pages}
             page={page}
             keyword={keyword ? keyword : ''}
-          /> */}
+          />
         </>
       )}
     </>

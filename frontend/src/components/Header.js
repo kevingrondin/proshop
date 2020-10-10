@@ -1,10 +1,14 @@
 import React, { useContext } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
+import SearchBox from './SearchBox'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
 
 import { UserContext } from "../context/UserContext"
 
 const Header = () => {
+  const location = useLocation()
+  const { from } = location.state || { from : '/public' }
+
   const {user, setUser } = useContext(UserContext)
 
   const logoutHandler = () => { setUser(null) }
@@ -18,9 +22,12 @@ const Header = () => {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
             {/* <Route render={({ history }) => <SearchBox history={history} />} /> */}
+            <SearchBox history={from} />
             <Nav className='ml-auto'>
               <NavLink to='/cart'>
-                <i className='fas fa-shopping-cart'></i> Cart
+                <Nav.Link>
+                    <i className='fas fa-shopping-cart'></i> Cart
+                </Nav.Link>
               </NavLink>
               {user ? (
                 <NavDropdown title={user.name} id='username'>
@@ -33,7 +40,9 @@ const Header = () => {
                 </NavDropdown>
               ) : (
                 <NavLink to='/login'>
-                  <i className='fas fa-user'></i> Sign In
+                  <Nav.Link>
+                    <i className='fas fa-user'></i> Sign In
+                  </Nav.Link>
                 </NavLink>
               )}
               {user && user.isAdmin && (

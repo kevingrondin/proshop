@@ -7,16 +7,16 @@ import Message from './Message'
 import { ProductContext } from "../context/ProductContext"
 
 const ProductCarousel = () => {
-  const { errorProduct, loadingProduct, topProducts, getTopProducts } = useContext(ProductContext)
+  const { errorTopProducts, loadingTopProducts, topProducts, getTopProducts } = useContext(ProductContext)
 
   useEffect(() => {
     getTopProducts()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  return loadingProduct ? (
+  return loadingTopProducts ? (
     <Loader />
-  ) : errorProduct ? (
-    <Message variant='danger'>{errorProduct}</Message>
+  ) : errorTopProducts ? (
+    <Message variant='danger'>{errorTopProducts}</Message>
   ) : (
     <Carousel pause='hover' className='bg-dark'>
       {topProducts.map((product) => (

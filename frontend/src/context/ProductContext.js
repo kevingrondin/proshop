@@ -6,39 +6,58 @@ export const ProductContext = createContext(null)
 export default ({ children }) => {
   // const {user } = useContext(UserContext)
 
-  const [ errorProduct, setErrorProduct ] = useState(null)
-  const [ errorTopProduct, setErrorTopProduct ] = useState(null)
-  const [ loadingProduct, setLoadingProduct ] = useState(true)
-  const [ loadingTopProduct, setLoadingTopProduct ] = useState(true)
+  const [ errorProductDetail, setErrorProductDetail ] = useState(null)
+  const [ errorProducts, setErrorProducts ] = useState(null)
+  const [ errorTopProducts, setErrorTopProducts ] = useState(null)
+
+  const [ loadingProductDetail, setLoadingProductDetail ] = useState(true)
+  const [ loadingProducts, setLoadingProducts ] = useState(true)
+  const [ loadingTopProducts, setLoadingTopProducts ] = useState(true)
+
   const [ page, setPage ] = useState('')
   const [ pages, setPages ] = useState('')
+
+  const [ productDetail, setProductDetail] = useState([])
   const [ products, setProducts ] = useState([])
   const [ topProducts, setTopProducts ] = useState([])
 
+  const getProductById = async (id) => {
+    try {
+      setLoadingProductDetail(true)
+      let response = await fetch(`/api/products/${id}`)
+      let data = await response.json()
+      setProductDetail(data)
+      setLoadingProductDetail(false)
+    } catch(err) {
+      setErrorProductDetail(err)
+      console.log("ERROR_GET_PRODUCTDETAIL", err)
+    }
+  }
+
   const getProducts = async (keyword = '', pageNumber = '') => {
     try {
-      setLoadingProduct(true)
+      setLoadingProducts(true)
       let response = await fetch(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)
       let data = await response.json()
       setProducts(data.products)
       setPages(data.pages)
       setPage(data.page)
-      setLoadingProduct(false)
+      setLoadingProducts(false)
     } catch(err) {
-      setErrorProduct(err)
+      setErrorProducts(err)
       console.log("ERROR_GET_PRODUCT", err)
     }
   }
 
   const getTopProducts = async () => {
     try {
-      setLoadingTopProduct(true)
+      setLoadingTopProducts(true)
       let response = await fetch(`/api/products/top`)
       let data = await response.json()
       setTopProducts(data)
-      setLoadingTopProduct(false)
+      setLoadingTopProducts(false)
     } catch(err) {
-      setErrorTopProduct(err)
+      setErrorTopProducts(err)
       console.log("ERROR_GET_TOP_PRODUCT", err)
     }
   }
@@ -56,14 +75,18 @@ export default ({ children }) => {
   return (
     <ProductContext.Provider 
       value={{
-        errorProduct, 
-        errorTopProduct,
+        errorProductDetail,
+        errorProducts, 
+        errorTopProducts,
+        getProductById,
         getProducts,
         getTopProducts, 
-        loadingProduct,
-        loadingTopProduct,
+        loadingProductDetail,
+        loadingProducts,
+        loadingTopProducts,
         page,
         pages,
+        productDetail,
         products,
         topProducts
       }}>
