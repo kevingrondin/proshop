@@ -31,6 +31,11 @@ const RegisterPage = () => {
       navigate('/')
   }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (errorRegisterUser === 'utilisateur déja connu')
+      navigate('/login', { state: { email: credentials.email }})
+  }, [errorRegisterUser])
+
 
   const submitHandler = (e) => {
     e.preventDefault()

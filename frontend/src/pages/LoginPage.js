@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
+import Message from '../components/Message'
 
 import { UserContext } from "../context/UserContext"
 
@@ -11,7 +12,7 @@ const LoginScreen  = () => {
   const navigate = useNavigate()
   const location = useLocation()
   // const query = useQuery()
-  const { user, login } = useContext(UserContext)
+  const { errorRegisterUser, login, user} = useContext(UserContext)
   const [credentials, setCredentials] = useState({
     email: location?.state?.email ?? '',
     password: ''
@@ -41,6 +42,7 @@ const LoginScreen  = () => {
   return (
     <FormContainer>
       <h1>Sign In</h1>
+      {errorRegisterUser && <Message variant='warning'>{errorRegisterUser} vous pouvez vous connecter</Message>}
       {/* {error && <Message variant='danger'>{error}</Message>}
       {loading && Loader} */}
       <Form onSubmit={submitHandler}>
