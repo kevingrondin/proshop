@@ -20,21 +20,26 @@ export default ({ children }) => {
 
   const login = async (credentials) => {
     try {
+      !errorLoginUser && setErrorLoginUser(null)
       setLoadingLoginUser(true)
-      let {data, type} = await axios.post(
+      let res = await axios.post(
         `/api/users/login`, 
         credentials,
         config_header,
       )
+      let {data, type} = await res.data
       switch(type) {
         case 'success':
           setLoadingLoginUser(false)
-          localStorage.setItem('user', JSON.stringify(data))
+          localStorage.setItem('user', data)
           setUser(data)
           break
         case 'error':
           setLoadingLoginUser(false)
           setErrorLoginUser(data)
+          setTimeout(() => {
+            !errorLoginUser && setErrorLoginUser(null)
+          }, 4500)
           break
         default:
           setErrorLoginUser("Error_Post_Login")
@@ -47,27 +52,30 @@ export default ({ children }) => {
 
   const register = async (credentials) => {
     try {
+      !errorRegisterUser && setErrorRegisterUser(null)
       setLoadingRegisterUser(true)
-      let res = await fetch(`/api/users`,{
-        method: "POST",
-        body: JSON.stringify(credentials),
+      let res = await axios.post(
+        `/api/users`, 
+        credentials, 
         config_header
-      })
-      let {data, type} = res.json()
-      console.log(data, type)
-      // switch(type) {
-      //   case 'success':
-      //     setLoadingRegisterUser(false)
-      //     // localStorage.setItem('user', JSON.stringify(data))
-      //     setUser(data)
-      //     break
-      //   case 'error':
-      //     setLoadingRegisterUser(false)
-      //     setErrorRegisterUser(data)
-      //     break
-      //   default:
-      //     setErrorRegisterUser("Error_Post_Login")
-      // }
+      )
+      let {data, type} = await res.data
+      switch(type) {
+        case 'success':
+          setLoadingRegisterUser(false)
+          localStorage.setItem('user', data)
+          setUser(data)
+          break
+        case 'error':
+          setLoadingRegisterUser(false)
+          setErrorRegisterUser(data)
+          setTimeout(() => {
+            !errorRegisterUser && setErrorRegisterUser(null)
+          }, 4500)
+          break
+        default:
+          setErrorRegisterUser("Error_Post_Login")
+      }
     } catch(err) {
       // setErrorRegisterUser(err)
       console.log("ERROR_REGISTER", err)
