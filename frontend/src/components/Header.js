@@ -25,9 +25,9 @@ const Header = () => {
             <SearchBox history={from} />
             <Nav className='ml-auto'>
               <NavLink to='/cart'>
-                <Nav.Link>
-                    <i className='fas fa-shopping-cart'></i> Cart
-                </Nav.Link>
+                {/* <Nav.Link> */}
+                    <i className='fas fa-shopping-cart'></i> Cart 
+                {/* </Nav.Link> */}
               </NavLink>
               {user ? (
                 <NavDropdown title={user.name} id='username'>
@@ -40,9 +40,9 @@ const Header = () => {
                 </NavDropdown>
               ) : (
                 <NavLink to='/login'>
-                  <Nav.Link>
-                    <i className='fas fa-user'></i> Sign In
-                  </Nav.Link>
+                  {/* <Nav.Link> */}
+                    <i className='fas fa-user'></i> Sign In 
+                  {/* </Nav.Link> */}
                 </NavLink>
               )}
               {user && user.isAdmin && (

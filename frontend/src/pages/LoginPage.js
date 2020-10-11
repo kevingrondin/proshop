@@ -1,17 +1,22 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 
 import { UserContext } from "../context/UserContext"
 
+// const useQuery = () => new URLSearchParams(useLocation().search)
+
 const LoginScreen  = () => {
   const navigate = useNavigate()
-  const { user, setUser } = useContext(UserContext)
+  const location = useLocation()
+  // const query = useQuery()
+  const { user, login } = useContext(UserContext)
   const [credentials, setCredentials] = useState({
-    email: '',
+    email: location?.state?.email ?? '',
     password: ''
   })
+  // const redirect = query?.search ?? '/'
 
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
@@ -25,7 +30,12 @@ const LoginScreen  = () => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    setUser(credentials)
+    try {
+      login(credentials)
+    }catch(err) {
+      // si l'email n'existe pas on redirige vers inscription avec la donnée email
+      navigate("/register", { state: { email: credentials.email }})
+    }
   }
 
   return (
@@ -38,18 +48,20 @@ const LoginScreen  = () => {
           <Form.Label>Email Adress</Form.Label>
           <Form.Control
             type='email'
+            name='email'
             placeholder='Enter email'
             value={credentials.email}
-            onChange={ e => handleChange(e)}>  
+            onChange={handleChange}>  
           </Form.Control>
         </Form.Group>
         <Form.Group controlId='password'>
           <Form.Label>Password</Form.Label>
           <Form.Control
             type='password'
+            name='password'
             placeholder='Enter password'
             value={credentials.password}
-            onChange={ e => handleChange(e)}>  
+            onChange={handleChange}>  
           </Form.Control>
         </Form.Group>
         <Button type='submit' variant='primary'>
@@ -60,9 +72,12 @@ const LoginScreen  = () => {
       <Row className='py-3'>
         <Col>
           New Customer?{' '}
-          {/* <Link to={redirect ? `/register?redirect=${redirect}`: '/register'}>
+          {/* <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
             Register
           </Link> */}
+         <Link to='/register'>
+           Register
+         </Link>
         </Col>
       </Row>
     </FormContainer>

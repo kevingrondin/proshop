@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import React, { useState, useEffect, useContext } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -7,47 +7,63 @@ import FormContainer from '../components/FormContainer'
 
 import { UserContext } from "../context/UserContext"
 
-const RegisterScreen = () => {
+const RegisterPage = () => {
   const navigate = useNavigate()
-  const redirect = location.search ? location.search.split('=')[1] : '/'
+  const location = useLocation()
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [message, setMessage] = useState(null)
+  const { errorRegisterUser, loadingRegisterUser, user, register } = useContext(UserContext)
 
-  const { loadingUser, errorUser, user } =  useContext(UserContext)
+  const [credentials, setCredentials] = useState({
+    email: location?.state?.email ?? "kevingrondin@outlook.com",
+    name: 'kevin',
+    password: 'acyzkh',
+    confirmPassword: 'acyzkh',
+    message: null
+  })
+
+  const handleChange = ({ currentTarget }) => {
+    const { name, value } = currentTarget;
+    setCredentials({...credentials, [name]: value})
+  }
 
   useEffect(() => {
-    if (userInfo) {
-      navigate(redirect)
-    }
-  }, [user, redirect])
+    if (user)
+      navigate('/')
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
+
 
   const submitHandler = (e) => {
     e.preventDefault()
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match')
-    } else {
-      dispatch(register(name, email, password))
+    try {
+      if (credentials.password === credentials.confirmPassword) {
+        register({
+          name : credentials.name, 
+          email : credentials.email, 
+          password : credentials.password
+        })
+      }
+    }catch(err) {
+      // si l'email n'existe pas on redirige vers inscription avec la donnée email
+      // navigate("/register", { state: { email: credentials.email }})
+      console.log(err)
     }
   }
 
   return (
     <FormContainer>
       <h1>Sign Up</h1>
-      {message && <Message variant='danger'>{message}</Message>}
-      {error && <Message variant='danger'>{error}</Message>}
-      {loading && <Loader />}
+      {credentials.message && <Message variant='danger'>{credentials.message}</Message>}
+      {errorRegisterUser && <Message variant='danger'>{errorRegisterUser}</Message>}
+      {loadingRegisterUser && <Loader />}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='name'>
           <Form.Label>Name</Form.Label>
           <Form.Control
             type='name'
+            name='name'
             placeholder='Enter name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={credentials.name}
+            onChange={handleChange}
           ></Form.Control>
         </Form.Group>
 
@@ -55,9 +71,10 @@ const RegisterScreen = () => {
           <Form.Label>Email Address</Form.Label>
           <Form.Control
             type='email'
+            name='email'
             placeholder='Enter email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={credentials.email}
+            onChange={handleChange}
           ></Form.Control>
         </Form.Group>
 
@@ -65,9 +82,10 @@ const RegisterScreen = () => {
           <Form.Label>Password</Form.Label>
           <Form.Control
             type='password'
+            name='password'
             placeholder='Enter password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={credentials.password}
+            onChange={handleChange}
           ></Form.Control>
         </Form.Group>
 
@@ -75,9 +93,10 @@ const RegisterScreen = () => {
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
             type='password'
+            name='confirmPassword'
             placeholder='Confirm password'
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={credentials.confirmPassword}
+            onChange={handleChange}
           ></Form.Control>
         </Form.Group>
 
@@ -88,8 +107,8 @@ const RegisterScreen = () => {
 
       <Row className='py-3'>
         <Col>
-          Have an Account?{' '}
-          <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
+          Have an Account?
+          <Link to='/login'>
             Login
           </Link>
         </Col>
@@ -98,4 +117,4 @@ const RegisterScreen = () => {
   )
 }
 
-export default RegisterScreen
+export default RegisterPage
