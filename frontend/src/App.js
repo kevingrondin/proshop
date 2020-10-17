@@ -4,6 +4,7 @@ import { Container } from "react-bootstrap"
 
 import Header from './components/Header'
 
+import CartPage from "./pages/CartPage"
 import HomePage from "./pages/HomePage"
 import LoginPage from "./pages/LoginPage"
 import ProductPage from "./pages/ProductPage"
@@ -15,7 +16,7 @@ const App = () => (
     <main className="py-3">
       <Container>
         <Routes>
-          <Route path='/cart/:productId' element={<HomePage />} />
+          <Route path='/cart/:productId' element={<CartPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path='/product/:id' element={<ProductPage />} />

@@ -34,7 +34,7 @@ const RegisterPage = () => {
   useEffect(() => {
     if (errorRegisterUser === 'utilisateur déja connu')
       navigate('/login', { state: { email: credentials.email }})
-  }, [errorRegisterUser])
+  }, [errorRegisterUser]) // eslint-disable-line react-hooks/exhaustive-deps
 
 
   const submitHandler = (e) => {
