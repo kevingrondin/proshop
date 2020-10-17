@@ -5,14 +5,17 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-import UserContextProvider from "./context/UserContext"
+import CartContextProvider from "./context/CartContext"
 import ProductContextProvider from "./context/ProductContext"
+import UserContextProvider from "./context/UserContext"
 
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
       <ProductContextProvider>
-        <App />
+        <CartContextProvider>
+          <App />
+        </CartContextProvider>
       </ProductContextProvider>
     </UserContextProvider>
   </React.StrictMode>,

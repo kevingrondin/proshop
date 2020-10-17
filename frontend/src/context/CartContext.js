@@ -1,87 +1,51 @@
 import React, { createContext, useState } from "react"
-import axios from "axios"
 
 export const CartContext = createContext(null)
 
 export default ({ children }) => {
-  const config_header = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }
 
-  const [errorLoginUser, setErrorLoginUser] = useState(null)
-  const [errorRegisterUser, setErrorRegisterUser] = useState(null)
+  const [cart, setCart] = useState([])
+  const [cartItem, setCartItem] = useState(null)
+  const [errorAddToCart, setErrorAddToCart] = useState(false)
+  const [loadingAddToCart, setLoadingAddToCart] = useState(false)
 
-  const [LoadingAdToCart, setLoadingAdToCart] = useState(false)
-  const [loadingRegisterUser, setLoadingRegisterUser] = useState(false)
-
-  const [cart, setCart] = useState(null)
 
   const addToCart = async (id, qty) => {
     try {
-      setLoadingAdToCart(true)
+      setLoadingAddToCart(true)
       let response = await fetch(`/api/products/${id}`)
       let data = await response.json()
-      let item = {
+      let item = await {
         product: data._id,
         name: data.name,
         image: data.image,
         price: data.price,
-        countInStock: data.countInStock
+        countInStock: data.countInStock,
+        qty
       }
-      setProducts(data.products)
-      setPages(data.pages)
-      setPage(data.page)
-      setLoadingProducts(false)
-    } catch(err) {
-      setErrorProducts(err)
-      console.log("ERROR_GET_PRODUCT", err)
-    }
-  }
-
-  const register = async (credentials) => {
-    try {
-      !errorRegisterUser && setErrorRegisterUser(null)
-      setLoadingRegisterUser(true)
-      let res = await axios.post(
-        `/api/users`, 
-        credentials, 
-        config_header
-      )
-      let {data, type} = await res.data
-      switch(type) {
-        case 'success':
-          setLoadingRegisterUser(false)
-          localStorage.setItem('user', data)
-          setUser(data)
-          break
-        case 'error':
-          setLoadingRegisterUser(false)
-          setErrorRegisterUser(data)
-          setTimeout(() => {
-            !errorRegisterUser && setErrorRegisterUser(null)
-          }, 4500)
-          break
-        default:
-          setErrorRegisterUser("Error_Post_Login")
+      await setCartItem(item)
+      const existItem = await cart?.find(x => x.product === item.product)
+      if(existItem) {
+        cart.map(x => x.product === existItem.product ? item : x)
+        console.log(cart)
+      } else {
+        setCart([...cart, item])
       }
+      localStorage.setItem('cartItems', JSON.stringify(cart))
+      setLoadingAddToCart(false)
     } catch(err) {
-      // setErrorRegisterUser(err)
-      console.log("ERROR_REGISTER", err)
+      setErrorAddToCart(err)
+      console.log("ERROR_ADDTOCART", err)
     }
   }
 
   return (
     <CartContext.Provider value={{ 
-      errorLoginUser,
-      errorRegisterUser,
-      loadingLoginUser,
-      loadingRegisterUser,
-      login,
-      setUser, 
-      user,
-      register 
+      addToCart,
+      cart,
+      cartItem,
+      errorAddToCart,
+      loadingAddToCart 
     }}>
       {children}
     </CartContext.Provider>
