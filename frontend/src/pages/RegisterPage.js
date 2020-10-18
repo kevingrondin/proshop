@@ -14,10 +14,10 @@ const RegisterPage = () => {
   const { errorRegisterUser, loadingRegisterUser, user, register } = useContext(UserContext)
 
   const [credentials, setCredentials] = useState({
-    email: location?.state?.email ?? "kevingrondin@outlook.com",
-    name: 'kevin',
-    password: 'acyzkh',
-    confirmPassword: 'acyzkh',
+    email: location?.state?.email ?? '',
+    name: '',
+    password: '',
+    confirmPassword: '',
     message: null
   })
 
@@ -48,8 +48,6 @@ const RegisterPage = () => {
         })
       }
     }catch(err) {
-      // si l'email n'existe pas on redirige vers inscription avec la donnée email
-      // navigate("/register", { state: { email: credentials.email }})
       console.log(err)
     }
   }

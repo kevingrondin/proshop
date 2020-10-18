@@ -11,7 +11,7 @@ const CartPage = () => {
   const navigate = useNavigate()
   const query = useQuery()
   const { productId } = useParams()
-  const { addToCart, cart } = useContext(CartContext)
+  const { addToCart, cart, removeFromCart } = useContext(CartContext)
 
   const [qty, setQty] = useState(1)
 
@@ -23,13 +23,11 @@ const CartPage = () => {
     }
   }, [productId, qty]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // const removeFromCartHandler = (id) => {
-  //   dispatch(removeFromCart(id))
-  // }
+  const removeFromCartHandler = (id) => 
+    removeFromCart(id)
 
-  const checkoutHandler = () => {
-    navigate("/login?redirect=shipping")
-  }
+  const checkoutHandler = () => 
+    navigate("/login", { state: { redirect: 'shipping' }})
 
   return (
     <Row>
@@ -65,13 +63,13 @@ const CartPage = () => {
                     </Form.Control>
                   </Col>
                   <Col md={2}>
-                    {/* <Button
+                    <Button
                       type='button'
                       variant='light'
                       onClick={() => removeFromCartHandler(item.product)}
                     >
                       <i className='fas fa-trash'></i>
-                    </Button> */}
+                    </Button>
                   </Col>
                 </Row>
               </ListGroup.Item>

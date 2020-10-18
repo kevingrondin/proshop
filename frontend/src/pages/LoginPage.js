@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import Message from '../components/Message'
+import Loader from '../components/Loader'
 
 import { UserContext } from "../context/UserContext"
 
@@ -12,12 +13,14 @@ const LoginScreen  = () => {
   const navigate = useNavigate()
   const location = useLocation()
   // const query = useQuery()
-  const { errorRegisterUser, login, user} = useContext(UserContext)
+  const { errorRegisterUser, login, loadingLoginUser, user} = useContext(UserContext)
   const [credentials, setCredentials] = useState({
     email: location?.state?.email ?? '',
     password: ''
   })
-  // const redirect = query?.search ?? '/'
+  
+  // l'utilisateur peux venir de CartPage avec un article au panier
+  const redirect = location?.sate?.redirect ?? '/'
 
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
@@ -26,15 +29,14 @@ const LoginScreen  = () => {
 
   useEffect(() => {
     if(user)
-      navigate("/", { replace : true })
-  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
+      navigate(redirect, { replace : true })
+  }, [user, redirect]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const submitHandler = (e) => {
     e.preventDefault()
     try {
       login(credentials)
     }catch(err) {
-      // si l'email n'existe pas on redirige vers inscription avec la donnée email
       navigate("/register", { state: { email: credentials.email }})
     }
   }
@@ -42,9 +44,8 @@ const LoginScreen  = () => {
   return (
     <FormContainer>
       <h1>Sign In</h1>
-      {errorRegisterUser && <Message variant='warning'>{errorRegisterUser} vous pouvez vous connecter</Message>}
-      {/* {error && <Message variant='danger'>{error}</Message>}
-      {loading && Loader} */}
+      {errorRegisterUser && <Message variant='warning'>{errorRegisterUser}</Message>}
+      {loadingLoginUser && <Loader />}
       <Form onSubmit={submitHandler}>
         <Form.Group controlId='email'>
           <Form.Label>Email Adress</Form.Label>
@@ -73,10 +74,7 @@ const LoginScreen  = () => {
 
       <Row className='py-3'>
         <Col>
-          New Customer?{' '}
-          {/* <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
-            Register
-          </Link> */}
+          New Customer?
          <Link to='/register'>
            Register
          </Link>
