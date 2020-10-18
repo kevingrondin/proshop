@@ -27,7 +27,8 @@ const CartPage = () => {
     removeFromCart(id)
 
   const checkoutHandler = () => 
-    navigate("/login", { state: { redirect: 'shipping' }})
+    navigate("/login", { state: { redirect: '/shipping' }})
+    // navigate("/login?redirect=shipping")
 
   return (
     <Row>
