@@ -9,6 +9,7 @@ import HomePage from "./pages/HomePage"
 import LoginPage from "./pages/LoginPage"
 import ProductPage from "./pages/ProductPage"
 import RegisterPage from "./pages/RegisterPage"
+import ShippingPage from "./pages/ShippingPage"
 
 const App = () => (
   <HashRouter>
@@ -22,6 +23,7 @@ const App = () => (
           <Route path='/product/:id' element={<ProductPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path='/search/:keyword' element={<HomePage />} />
+          <Route path='/shipping' element={<ShippingPage />} />
           <Route path="/" element={<HomePage />} />
         </Routes>
       </Container>
