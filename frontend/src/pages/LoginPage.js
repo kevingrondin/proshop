@@ -15,12 +15,10 @@ const LoginScreen  = () => {
   // const query = useQuery()
   const { errorRegisterUser, login, loadingLoginUser, user} = useContext(UserContext)
   const [credentials, setCredentials] = useState({
-    email: location?.state?.email ?? '',
-    password: ''
+    email: location?.state?.email ?? 'kevingrondin@outlook.com',
+    password: 'acyzkh'
   })
-  
-  // l'utilisateur peux venir de CartPage avec un article au panier
-  const redirect = location?.sate?.redirect ?? '/'
+  const [redirect, setRedirect] = useState(String(location?.state?.redirect) ?? '/')
 
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
