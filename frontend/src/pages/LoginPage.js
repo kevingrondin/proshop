@@ -18,7 +18,8 @@ const LoginScreen  = () => {
     email: location?.state?.email ?? 'kevingrondin@outlook.com',
     password: 'acyzkh'
   })
-  const [redirect, setRedirect] = useState(String(location?.state?.redirect) ?? '/')
+  // eslint-disable-next-line
+  const [redirect, setRedirect] = useState(String(location?.state?.redirect) ?? '/') 
 
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
