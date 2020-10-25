@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import Message from '../components/Message'
@@ -16,10 +16,9 @@ const LoginScreen  = () => {
   const { errorRegisterUser, login, loadingLoginUser, user} = useContext(UserContext)
   const [credentials, setCredentials] = useState({
     email: location?.state?.email ?? 'kevingrondin@outlook.com',
-    password: 'acyzkh'
+    password: ''
   })
-  // eslint-disable-next-line
-  const [redirect, setRedirect] = useState(String(location?.state?.redirect) ?? '/') 
+  const [redirect, setRedirect] = useState('/') 
 
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
@@ -27,16 +26,24 @@ const LoginScreen  = () => {
   }
 
   useEffect(() => {
+    if(location?.state?.redirect)
+      setRedirect(String(location?.state?.redirect))
+  }, [location]) 
+
+  useEffect(() => {
     if(user)
       navigate(redirect, { replace : true })
-  }, [user, redirect]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const _redirectRegisterWithEmail = () => 
+    navigate("/register", { state: { email: credentials?.email }})
 
   const submitHandler = (e) => {
     e.preventDefault()
     try {
       login(credentials)
     }catch(err) {
-      navigate("/register", { state: { email: credentials.email }})
+      _redirectRegisterWithEmail()
     }
   }
 
@@ -73,10 +80,10 @@ const LoginScreen  = () => {
 
       <Row className='py-3'>
         <Col>
-          New Customer?
-         <Link to='/register'>
-           Register
-         </Link>
+         <Button
+          onClick={ () =>_redirectRegisterWithEmail()}>
+            New Customer?
+         </Button>
         </Col>
       </Row>
     </FormContainer>

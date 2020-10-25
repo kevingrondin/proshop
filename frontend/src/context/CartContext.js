@@ -5,7 +5,8 @@ export const CartContext = createContext(null)
 export default ({ children }) => {
 
   const [cart, setCart] = useState([])
-  const [shippingAddress, setShippingAddress] = useState({})
+  const [shippingAddress, setShippingAddress] = useState(null)
+  const [paymentMethod, setPaymentMethod] = useState(null)
   const [cartItem, setCartItem] = useState(null)
   const [errorAddToCart, setErrorAddToCart] = useState(false)
   const [loadingAddToCart, setLoadingAddToCart] = useState(false)
@@ -44,10 +45,6 @@ export default ({ children }) => {
     localStorage.setItem('cartItems', JSON.stringify(cart))
   }
 
-  const saveShippingAddress = async (data) => {
-    setShippingAddress(data)
-    localStorage.setItem('shippingAddress', JSON.stringify(data))
-  }
   return (
     <CartContext.Provider value={{ 
       addToCart,
@@ -55,8 +52,10 @@ export default ({ children }) => {
       cartItem,
       errorAddToCart,
       loadingAddToCart,
+      paymentMethod,
       removeFromCart,
-      saveShippingAddress,
+      setPaymentMethod,
+      setShippingAddress,
       shippingAddress 
     }}>
       {children}

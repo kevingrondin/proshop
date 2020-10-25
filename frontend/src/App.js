@@ -7,6 +7,7 @@ import Header from './components/Header'
 import CartPage from "./pages/CartPage"
 import HomePage from "./pages/HomePage"
 import LoginPage from "./pages/LoginPage"
+import PaymentPage from "./pages/PaymentPage"
 import ProductPage from "./pages/ProductPage"
 import RegisterPage from "./pages/RegisterPage"
 import ShippingPage from "./pages/ShippingPage"
@@ -20,6 +21,7 @@ const App = () => (
           <Route path='/cart/:productId' element={<CartPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path='/product/:id' element={<PaymentPage />} />
           <Route path='/product/:id' element={<ProductPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path='/search/:keyword' element={<HomePage />} />

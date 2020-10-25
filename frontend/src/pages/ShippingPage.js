@@ -8,17 +8,18 @@ import { CartContext } from "../context/CartContext"
 
 const ShippingPage = () => {
   const navigate = useNavigate()
-  const { cart, saveShippingAddress } = useContext(CartContext)
-  const { shippingAddress } = cart
+  const { shippingAddress, setShippingAddress } = useContext(CartContext)
+  // const { shippingAddress } = cart
 
   const [address, setAddress] = useState(shippingAddress?.address)
   const [city, setCity] = useState(shippingAddress?.city)
   const [postalCode, setPostalCode] = useState(shippingAddress?.postalCode)
   const [country, setCountry] = useState(shippingAddress?.country)
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault()
-    saveShippingAddress({ address, city, postalCode, country })
+    await setShippingAddress({ address, city, postalCode, country })
+    await localStorage.setItem('shippingAddress', JSON.stringify(shippingAddress))
     navigate('/payment')
   }
 

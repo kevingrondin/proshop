@@ -1,6 +1,7 @@
 import React, {useContext, useEffect} from 'react'
 import { NavLink, useParams } from "react-router-dom"
 import Meta from '../components/Meta'
+import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { Row, Col } from 'react-bootstrap'
 import Paginate from '../components/Paginate'
@@ -11,7 +12,7 @@ import { ProductContext } from "../context/ProductContext"
 
 const HomePage = () => {
   const { keyword } = useParams()
-  const { loadingProducts, products, getProducts, pages, page } = useContext(ProductContext)
+  const { errorTopProducts, loadingProducts, products, getProducts, pages, page } = useContext(ProductContext)
   
   useEffect(() => {
     getProducts(keyword)
@@ -28,6 +29,8 @@ const HomePage = () => {
       <h1>Latest Products</h1>
       {loadingProducts ? (
         <Loader />
+      ) : errorTopProducts ? (
+        <Message variant='danger'>{errorTopProducts}</Message>
       ) : (
         <>
           <Row>
