@@ -6,17 +6,20 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import CartContextProvider from "./context/CartContext"
+import OrderContextProvider from "./context/OrderContext"
 import ProductContextProvider from "./context/ProductContext"
 import UserContextProvider from "./context/UserContext"
 
 ReactDOM.render(
   <React.StrictMode>
     <UserContextProvider>
-      <ProductContextProvider>
-        <CartContextProvider>
-          <App />
-        </CartContextProvider>
-      </ProductContextProvider>
+      <OrderContextProvider>
+        <ProductContextProvider>
+          <CartContextProvider>
+            <App />
+          </CartContextProvider>
+        </ProductContextProvider>
+      </OrderContextProvider>
     </UserContextProvider>
   </React.StrictMode>,
   document.getElementById('root')

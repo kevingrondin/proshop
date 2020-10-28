@@ -3,30 +3,25 @@ import { useNavigate } from 'react-router-dom'
 import { Form, Button, Col } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import CheckoutSteps from '../components/CheckoutSteps'
-import { savePaymentMethod } from '../actions/cartActions'
 
 import { CartContext } from "../context/CartContext"
 
 const PaymentPage = () => {
   const navigate = useNavigate()
-  const { shippingAddress } = useContext(CartContext)
-  const [paymentMethod, setPaymentMethod] = useState('PayPal')
+  const { setPaymentMethod, shippingAddress } = useContext(CartContext)
+  const [payment, setPayment] = useState('PayPal')
   // const { shippingAddress } = cart
 
   useEffect(() => {
     if (!shippingAddress) {
       navigate('/shipping')
     }
-  }, [shippingAddress])
+  }, [shippingAddress]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const savePaymentMethod = e => {
-    setPaymentMethod()
-    localStorage.setItem('paymentMethod', JSON.stringify(data))
-  }
-
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault()
-    savePaymentMethod(paymentMethod)
+    await setPaymentMethod(payment)
+    await localStorage.setItem('paymentMethod', JSON.stringify(payment))
     navigate('/placeorder')
   }
 
@@ -45,7 +40,7 @@ const PaymentPage = () => {
               name='paymentMethod'
               value='PayPal'
               checked
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onChange={(e) => setPayment(e.target.value)}
             ></Form.Check>
             <Form.Check
               type='radio'
@@ -53,7 +48,7 @@ const PaymentPage = () => {
               id='Stripe'
               name='paymentMethod'
               value='Stripe'
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onChange={(e) => setPayment(e.target.value)}
             ></Form.Check>
           </Col>
         </Form.Group>
