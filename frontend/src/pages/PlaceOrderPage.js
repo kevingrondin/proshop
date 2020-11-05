@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
@@ -6,17 +6,17 @@ import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 
 import { CartContext } from "../context/CartContext"
+import { OrderContext } from "../context/OrderContext"
 
 const PlaceOrderPage = () => {
   const navigate = useNavigate()
-  const { cart } = useContext(CartContext)
+  const { cart, shippingAddress, paymentMethod } = useContext(CartContext)
+  const { createOrder, order } = useContext(OrderContext)
   //   Calculate prices
-  const addDecimals = (num) => {
-    return (Math.round(num * 100) / 100).toFixed(2)
-  }
+  const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2)
 
   cart.itemsPrice = addDecimals(
-    cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
+    cart.reduce((acc, item) => acc + item.price * item.qty, 0)
   )
   cart.shippingPrice = addDecimals(cart.itemsPrice > 100 ? 0 : 100)
   cart.taxPrice = addDecimals(Number((0.15 * cart.itemsPrice).toFixed(2)))
@@ -27,16 +27,14 @@ const PlaceOrderPage = () => {
   ).toFixed(2)
 
   useEffect(() => {
-    if (success) {
+    if (order.success) {
       navigate(`/order/${order._id}`)
       // dispatch({ type: ORDER_CREATE_RESET })
     }
-    // eslint-disable-next-line
-  }, [navigate, success])
+  }, [navigate, order.success]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const placeOrderHandler = () => {
-    dispatch(
-      createOrder({
+    createOrder({
         orderItems: cart.cartItems,
         shippingAddress: cart.shippingAddress,
         paymentMethod: cart.paymentMethod,
@@ -44,8 +42,7 @@ const PlaceOrderPage = () => {
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
-      })
-    )
+    })
   }
 
   return (
@@ -58,25 +55,25 @@ const PlaceOrderPage = () => {
               <h2>Shipping</h2>
               <p>
                 <strong>Address:</strong>
-                {cart.shippingAddress.address}, {cart.shippingAddress.city}{' '}
-                {cart.shippingAddress.postalCode},{' '}
-                {cart.shippingAddress.country}
+                {shippingAddress.address}, {shippingAddress.city}{' '}
+                {shippingAddress.postalCode},{' '}
+                {shippingAddress.country}
               </p>
             </ListGroup.Item>
 
             <ListGroup.Item>
               <h2>Payment Method</h2>
               <strong>Method: </strong>
-              {cart.paymentMethod}
+              {paymentMethod}
             </ListGroup.Item>
 
             <ListGroup.Item>
               <h2>Order Items</h2>
-              {cart.cartItems.length === 0 ? (
+              {cart.length === 0 ? (
                 <Message>Your cart is empty</Message>
               ) : (
                 <ListGroup variant='flush'>
-                  {cart.cartItems.map((item, index) => (
+                  {cart.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
                         <Col md={1}>
@@ -134,7 +131,7 @@ const PlaceOrderPage = () => {
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
-                {error && <Message variant='danger'>{error}</Message>}
+                {order.error && <Message variant='danger'>{order.error}</Message>}
               </ListGroup.Item>
               <ListGroup.Item>
                 <Button

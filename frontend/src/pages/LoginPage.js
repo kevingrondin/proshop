@@ -18,7 +18,6 @@ const LoginScreen  = () => {
     email: location?.state?.email ?? 'kevingrondin@outlook.com',
     password: ''
   })
-  const [redirect, setRedirect] = useState('/') 
 
   const handleChange = ({ currentTarget }) => {
     const { name, value } = currentTarget;
@@ -26,14 +25,11 @@ const LoginScreen  = () => {
   }
 
   useEffect(() => {
-    if(location?.state?.redirect)
-      setRedirect(String(location?.state?.redirect))
-  }, [location]) 
-
-  useEffect(() => {
-    if(user)
-      navigate(redirect, { replace : true })
-  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
+    if(user && location?.state?.redirect)
+      navigate(String(location?.state?.redirect))
+    if(user && !location?.state?.redirect)
+      navigate('/', { replace: true })
+  }, [user, location]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const _redirectRegisterWithEmail = () => 
     navigate("/register", { state: { email: credentials?.email }})
