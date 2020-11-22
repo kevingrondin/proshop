@@ -14,17 +14,21 @@ export default ({ children }) => {
     error: null
   })
 
-  const _setToken = () => {
-    axios.defaults.headers["Content-Type"] = 'application/json'
-    axios.defaults.headers["Authorization"] = `Bearer ${user.token}`
-  } 
+  // axios.defaults.headers["Content-Type"] = 'application/json'
+  // axios.defaults.headers["Authorization"] = `Bearer ${user.token}`
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${user?.token}`,
+    },
+  }
 
-  const createOrder = async (data) => {
+  const createOrder = async (dataOrder) => {
     try {
-      await _setToken()
-      setOrder({...order, loading: true})
-      let {data} = await fetch('/api/orders/')
-      setOrder({...order, data})
+      await setOrder({...order, loading: true})
+      console.log('posts orders', dataOrder)
+      let {data} = await axios.post('/api/orders/', dataOrder, config)
+      await setOrder({...order, data})
       setOrder({...order, loading: false})
     } catch(err) {
       setOrder({...order, error: err})
@@ -47,6 +51,7 @@ export default ({ children }) => {
       value={{
         createOrder,
         order,
+        setOrder
       }}>
       {children}
     </OrderContext.Provider>

@@ -11,7 +11,7 @@ import { OrderContext } from "../context/OrderContext"
 const PlaceOrderPage = () => {
   const navigate = useNavigate()
   const { cart, shippingAddress, paymentMethod } = useContext(CartContext)
-  const { createOrder, order } = useContext(OrderContext)
+  const { createOrder, order,  } = useContext(OrderContext)
   //   Calculate prices
   const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2)
 
@@ -35,9 +35,9 @@ const PlaceOrderPage = () => {
 
   const placeOrderHandler = () => {
     createOrder({
-        orderItems: cart.cartItems,
-        shippingAddress: cart.shippingAddress,
-        paymentMethod: cart.paymentMethod,
+        orderItems: cart,
+        shippingAddress,
+        paymentMethod,
         itemsPrice: cart.itemsPrice,
         shippingPrice: cart.shippingPrice,
         taxPrice: cart.taxPrice,
@@ -55,9 +55,9 @@ const PlaceOrderPage = () => {
               <h2>Shipping</h2>
               <p>
                 <strong>Address:</strong>
-                {shippingAddress.address}, {shippingAddress.city}{' '}
-                {shippingAddress.postalCode},{' '}
-                {shippingAddress.country}
+                {shippingAddress?.address}, {shippingAddress?.city}{' '}
+                {shippingAddress?.postalCode},{' '}
+                {shippingAddress?.country}
               </p>
             </ListGroup.Item>
 
