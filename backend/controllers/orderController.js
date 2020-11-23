@@ -7,13 +7,15 @@ import Order from '../models/orderModel.js'
 const addOrderItems = asyncHandler(async (req, res) => {
   const {
     orderItems,
-    shippingAdress,
+    shippingAddress,
     paymentMethod,
     itemsPrice,
     taxPrice,
     shippingPrice,
     totalPrice
   } = req.body
+
+  console.log('body', req.body)
 
   if (orderItems && orderItems.length === 0) {
     res.status(400)
@@ -23,7 +25,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     const order = new Order({
       orderItems,
       user: req.user._id,
-      shippingAdress,
+      shippingAddress,
       paymentMethod,
       itemsPrice,
       taxPrice,
@@ -31,8 +33,8 @@ const addOrderItems = asyncHandler(async (req, res) => {
       totalPrice
     })
 
-    const createOrder = await order.save()
-    res.statut(201).json(createOrder)
+    const createdOrder = await order.save()
+    res.status(201).json(createdOrder)
   }
 })
 
