@@ -50,6 +50,14 @@ export default ({ children }) => {
     }
   }
 
+  const logout = async (credentials) => {
+    localStorage.removeItem('userInfo')
+    localStorage.removeItem('cartItems')
+    localStorage.removeItem('shippingAddress')
+    localStorage.removeItem('paymentMethod')
+    document.location.href = '/login'
+  }
+
   const register = async (credentials) => {
     try {
       !errorRegisterUser && setErrorRegisterUser(null)
@@ -89,6 +97,7 @@ export default ({ children }) => {
       loadingLoginUser,
       loadingRegisterUser,
       login,
+      logout,
       setUser,
       user,
       register

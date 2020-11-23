@@ -5,7 +5,7 @@ import { UserContext } from '../context/UserContext'
 export const OrderContext = createContext(null)
 
 export default ({ children }) => {
-  const { user } = useContext(UserContext)
+  const { user, logout } = useContext(UserContext)
 
   const [order, setOrder] = useState({
     loading: false,
@@ -30,7 +30,11 @@ export default ({ children }) => {
       const { data } = await axios.post('/api/orders/', dataOrder, config)
       await setOrder({ ...order, data })
       setOrder({ ...order, loading: false })
+      localStorage.removeItem('cartItems')
     } catch (err) {
+      let message = err?.response?.data?.message ?? err?.message
+      if(message === 'Not authorized, token failed')
+        logout()
       setOrder({ ...order, error: err })
       console.log('ERROR_GET_PRODUCTDETAIL', err)
     }

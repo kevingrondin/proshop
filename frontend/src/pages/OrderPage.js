@@ -1,15 +1,22 @@
 import React, { useContext, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
+import { PayPalButton } from 'react-paypal-button-v2'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 
 import { CartContext } from '../context/CartContext'
 import { OrderContext } from '../context/OrderContext'
 
-const PlaceOrderPage = () => {
+const OrderPage = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const orderId = location?.state?.orderId ?? ''
+
+  const [sdkReady, setSdkReady] = useState(false)
+
   const { cart, shippingAddress, paymentMethod } = useContext(CartContext)
   const { createOrder, order } = useContext(OrderContext)
   //   Calculate prices
@@ -28,8 +35,8 @@ const PlaceOrderPage = () => {
 
   useEffect(() => {
     if (order.success) {
-      // navigate(`/order/${order?.data?._id}`)
-      navigate('/order', { state: { orderId: order?.data?._id } })
+      navigate(`/order/${order?.data?._id}`)
+      // dispatch({ type: ORDER_CREATE_RESET })
     }
   }, [navigate, order.success]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -45,35 +52,60 @@ const PlaceOrderPage = () => {
     })
   }
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : error ? (
+    <Message variant='danger'>{error}</Message>
+  ) :
     <>
-      <CheckoutSteps step1 step2 step3 step4 />
+      <h1>Order {order?.data?._id}</h1>
       <Row>
         <Col md={8}>
           <ListGroup variant='flush'>
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                <strong>Address:</strong>
-                {shippingAddress?.address}, {shippingAddress?.city}{' '}
-                {shippingAddress?.postalCode},{' '}
-                {shippingAddress?.country}
+                <strong>Name: </strong> {order.user.name}
               </p>
+              <p>
+                <strong>Email: </strong>{' '}
+                <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
+              </p>
+              <p>
+                <strong>Address:</strong>
+                {order.shippingAddress.address}, {order.shippingAddress.city}{' '}
+                {order.shippingAddress.postalCode},{' '}
+                {order.shippingAddress.country}
+              </p>
+              {order.isDelivered ? (
+                <Message variant='success'>
+                  Delivered on {order.deliveredAt}
+                </Message>
+              ) : (
+                <Message variant='danger'>Not Delivered</Message>
+              )}
             </ListGroup.Item>
 
             <ListGroup.Item>
               <h2>Payment Method</h2>
-              <strong>Method: </strong>
-              {paymentMethod}
+              <p>
+                <strong>Method: </strong>
+                {order.paymentMethod}
+              </p>
+              {order.isPaid ? (
+                <Message variant='success'>Paid on {order.paidAt}</Message>
+              ) : (
+                <Message variant='danger'>Not Paid</Message>
+              )}
             </ListGroup.Item>
 
             <ListGroup.Item>
               <h2>Order Items</h2>
-              {cart.length === 0 ? (
-                <Message>Your cart is empty</Message>
+              {order.orderItems.length === 0 ? (
+                <Message>Order is empty</Message>
               ) : (
                 <ListGroup variant='flush'>
-                  {cart.map((item, index) => (
+                  {order.orderItems.map((item, index) => (
                     <ListGroup.Item key={index}>
                       <Row>
                         <Col md={1}>
@@ -109,40 +141,55 @@ const PlaceOrderPage = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${cart.itemsPrice}</Col>
+                  <Col>${order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${cart.shippingPrice}</Col>
+                  <Col>${order.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${cart.taxPrice}</Col>
+                  <Col>${order.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${cart.totalPrice}</Col>
+                  <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroup.Item>
-                {order.error && <Message variant='danger'>{order.error}</Message>}
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Button
-                  type='button'
-                  className='btn-block'
-                  disabled={cart.cartItems === 0}
-                  onClick={placeOrderHandler}
-                >
-                  Place Order
-                </Button>
-              </ListGroup.Item>
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {!sdkReady ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButton
+                      amount={order.totalPrice}
+                      onSuccess={successPaymentHandler}
+                    />
+                  )}
+                </ListGroup.Item>
+              )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type='button'
+                      className='btn btn-block'
+                      onClick={deliverHandler}
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>
@@ -151,4 +198,4 @@ const PlaceOrderPage = () => {
   )
 }
 
-export default PlaceOrderPage
+export default OrderPage
