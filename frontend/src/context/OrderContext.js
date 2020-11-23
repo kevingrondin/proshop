@@ -1,13 +1,13 @@
-import React, { createContext,useContext, useState} from "react"
-import axios from "axios"
-import { UserContext } from "../context/UserContext"
+import React, { createContext, useContext, useState } from 'react'
+import axios from 'axios'
+import { UserContext } from '../context/UserContext'
 
 export const OrderContext = createContext(null)
 
 export default ({ children }) => {
   const { user } = useContext(UserContext)
 
-  const [ order , setOrder ] = useState({
+  const [order, setOrder] = useState({
     loading: false,
     sucess: true,
     data: null,
@@ -19,20 +19,20 @@ export default ({ children }) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${user?.token}`,
-    },
+      Authorization: `Bearer ${user?.token}`
+    }
   }
 
   const createOrder = async (dataOrder) => {
     try {
-      await setOrder({...order, loading: true})
+      await setOrder({ ...order, loading: true })
       console.log('posts orders', dataOrder)
-      let {data} = await axios.post('/api/orders/', dataOrder, config)
-      await setOrder({...order, data})
-      setOrder({...order, loading: false})
-    } catch(err) {
-      setOrder({...order, error: err})
-      console.log("ERROR_GET_PRODUCTDETAIL", err)
+      const { data } = await axios.post('/api/orders/', dataOrder, config)
+      await setOrder({ ...order, data })
+      setOrder({ ...order, loading: false })
+    } catch (err) {
+      setOrder({ ...order, error: err })
+      console.log('ERROR_GET_PRODUCTDETAIL', err)
     }
   }
 
@@ -47,13 +47,14 @@ export default ({ children }) => {
   // }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <OrderContext.Provider 
+    <OrderContext.Provider
       value={{
         createOrder,
         order,
         setOrder
-      }}>
+      }}
+    >
       {children}
     </OrderContext.Provider>
   )
-};
+}

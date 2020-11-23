@@ -6,8 +6,8 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import Meta from '../components/Meta'
 
-import { ProductContext } from "../context/ProductContext"
-import { UserContext } from "../context/UserContext"
+import { ProductContext } from '../context/ProductContext'
+import { UserContext } from '../context/UserContext'
 
 const ProductPage = () => {
   const navigate = useNavigate()
@@ -181,7 +181,7 @@ const ProductPage = () => {
                           row='3'
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
-                        ></Form.Control>
+                        />
                       </Form.Group>
                       <Button type='submit' variant='primary'>
                         Submit

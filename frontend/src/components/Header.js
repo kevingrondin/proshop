@@ -3,13 +3,13 @@ import { NavLink, useLocation } from 'react-router-dom'
 import SearchBox from './SearchBox'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
 
-import { UserContext } from "../context/UserContext"
+import { UserContext } from '../context/UserContext'
 
 const Header = () => {
   const location = useLocation()
-  const { from } = location.state || { from : '/public' }
+  const { from } = location.state || { from: '/public' }
 
-  const {user, setUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
 
   const logoutHandler = () => { setUser(null) }
   return (
@@ -26,7 +26,7 @@ const Header = () => {
             <Nav className='ml-auto'>
               <NavLink to='/cart'>
                 {/* <Nav.Link> */}
-                    <i className='fas fa-shopping-cart'></i> Cart 
+                <i className='fas fa-shopping-cart' /> Cart
                 {/* </Nav.Link> */}
               </NavLink>
               {user ? (
@@ -41,7 +41,7 @@ const Header = () => {
               ) : (
                 <NavLink to='/login'>
                   {/* <Nav.Link> */}
-                    <i className='fas fa-user'></i> Sign In 
+                  <i className='fas fa-user' /> Sign In
                   {/* </Nav.Link> */}
                 </NavLink>
               )}

@@ -1,13 +1,13 @@
-import React, { createContext, useState } from "react"
-import axios from "axios"
+import React, { createContext, useState } from 'react'
+import axios from 'axios'
 
 export const UserContext = createContext(null)
 
 export default ({ children }) => {
   const config_header = {
     headers: {
-      'Content-Type': 'application/json',
-    },
+      'Content-Type': 'application/json'
+    }
   }
 
   const [errorLoginUser, setErrorLoginUser] = useState(null)
@@ -22,13 +22,13 @@ export default ({ children }) => {
     try {
       !errorLoginUser && setErrorLoginUser(null)
       setLoadingLoginUser(true)
-      let res = await axios.post(
-        `/api/users/login`, 
+      const res = await axios.post(
+        '/api/users/login',
         credentials,
-        config_header,
+        config_header
       )
-      let {data, type} = await res.data
-      switch(type) {
+      const { data, type } = await res.data
+      switch (type) {
         case 'success':
           setLoadingLoginUser(false)
           localStorage.setItem('user', data)
@@ -42,9 +42,9 @@ export default ({ children }) => {
           }, 4500)
           break
         default:
-          setErrorLoginUser("Error_Post_Login")
+          setErrorLoginUser('Error_Post_Login')
       }
-    } catch(err) {
+    } catch (err) {
       setErrorLoginUser(err)
       console.log(err)
     }
@@ -54,13 +54,13 @@ export default ({ children }) => {
     try {
       !errorRegisterUser && setErrorRegisterUser(null)
       setLoadingRegisterUser(true)
-      let res = await axios.post(
-        `/api/users`, 
-        credentials, 
+      const res = await axios.post(
+        '/api/users',
+        credentials,
         config_header
       )
-      let {data, type} = await res.data
-      switch(type) {
+      const { data, type } = await res.data
+      switch (type) {
         case 'success':
           setLoadingRegisterUser(false)
           localStorage.setItem('user', data)
@@ -74,26 +74,27 @@ export default ({ children }) => {
           }, 4500)
           break
         default:
-          setErrorRegisterUser("Error_Post_Login")
+          setErrorRegisterUser('Error_Post_Login')
       }
-    } catch(err) {
+    } catch (err) {
       // setErrorRegisterUser(err)
-      console.log("ERROR_REGISTER", err)
+      console.log('ERROR_REGISTER', err)
     }
   }
 
   return (
-    <UserContext.Provider value={{ 
+    <UserContext.Provider value={{
       errorLoginUser,
       errorRegisterUser,
       loadingLoginUser,
       loadingRegisterUser,
       login,
-      setUser, 
+      setUser,
       user,
-      register 
-    }}>
+      register
+    }}
+    >
       {children}
     </UserContext.Provider>
   )
-};
+}

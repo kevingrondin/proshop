@@ -9,8 +9,8 @@ const getProducts = asyncHandler(async (req, res) => {
     ? {
         name: {
           $regex: req.query.keyword,
-          $options: 'i',
-        },
+          $options: 'i'
+        }
       }
     : {}
 
@@ -55,7 +55,7 @@ const createProduct = asyncHandler(async (req, res) => {
     category: 'Sample category',
     countInStock: 0,
     numReviews: 0,
-    description: 'Sample description',
+    description: 'Sample description'
   })
 
   const createdProduct = await product.save()
@@ -70,7 +70,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     image,
     brand,
     category,
-    countInStock,
+    countInStock
   } = req.body
 
   const product = await Product.findById(req.params.id)
@@ -111,7 +111,7 @@ const createProductReview = asyncHandler(async (req, res) => {
       name: req.user.name,
       rating: Number(rating),
       comment,
-      user: req.user._id,
+      user: req.user._id
     }
 
     product.reviews.push(review)
@@ -143,5 +143,5 @@ export {
   createProduct,
   updateProduct,
   createProductReview,
-  getTopProducts,
+  getTopProducts
 }

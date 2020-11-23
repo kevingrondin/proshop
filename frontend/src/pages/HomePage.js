@@ -1,5 +1,5 @@
-import React, {useContext, useEffect} from 'react'
-import { NavLink, useParams } from "react-router-dom"
+import React, { useContext, useEffect } from 'react'
+import { NavLink, useParams } from 'react-router-dom'
 import Meta from '../components/Meta'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -8,12 +8,12 @@ import Paginate from '../components/Paginate'
 import Product from '../components/Product'
 import ProductCarousel from '../components/ProductCarousel'
 
-import { ProductContext } from "../context/ProductContext"
+import { ProductContext } from '../context/ProductContext'
 
 const HomePage = () => {
   const { keyword } = useParams()
   const { errorTopProducts, loadingProducts, products, getProducts, pages, page } = useContext(ProductContext)
-  
+
   useEffect(() => {
     getProducts(keyword)
   }, [keyword]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -43,7 +43,7 @@ const HomePage = () => {
           <Paginate
             pages={pages}
             page={page}
-            keyword={keyword ? keyword : ''}
+            keyword={keyword || ''}
           />
         </>
       )}

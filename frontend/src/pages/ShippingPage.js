@@ -4,7 +4,7 @@ import { Form, Button } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import CheckoutSteps from '../components/CheckoutSteps'
 
-import { CartContext } from "../context/CartContext"
+import { CartContext } from '../context/CartContext'
 
 const ShippingPage = () => {
   const navigate = useNavigate()
@@ -36,7 +36,7 @@ const ShippingPage = () => {
             value={address}
             required
             onChange={(e) => setAddress(e.target.value)}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId='city'>
@@ -47,7 +47,7 @@ const ShippingPage = () => {
             value={city}
             required
             onChange={(e) => setCity(e.target.value)}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId='postalCode'>
@@ -58,7 +58,7 @@ const ShippingPage = () => {
             value={postalCode}
             required
             onChange={(e) => setPostalCode(e.target.value)}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId='country'>
@@ -69,7 +69,7 @@ const ShippingPage = () => {
             value={country}
             required
             onChange={(e) => setCountry(e.target.value)}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Button type='submit' variant='primary'>

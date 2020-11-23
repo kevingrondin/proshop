@@ -1,9 +1,8 @@
-import React, { createContext, useState } from "react"
+import React, { createContext, useState } from 'react'
 
 export const CartContext = createContext(null)
 
 export default ({ children }) => {
-
   const [cart, setCart] = useState([])
   const [shippingAddress, setShippingAddress] = useState(null)
   const [paymentMethod, setPaymentMethod] = useState(null)
@@ -14,9 +13,9 @@ export default ({ children }) => {
   const addToCart = async (id, qty) => {
     try {
       setLoadingAddToCart(true)
-      let response = await fetch(`/api/products/${id}`)
-      let data = await response.json()
-      let item = await {
+      const response = await fetch(`/api/products/${id}`)
+      const data = await response.json()
+      const item = await {
         product: data._id,
         name: data.name,
         image: data.image,
@@ -25,28 +24,28 @@ export default ({ children }) => {
         qty
       }
       await setCartItem(item)
-      let existItem = await cart?.find(x => x.product === item.product)
-      if(existItem) {
+      const existItem = await cart?.find(x => x.product === item.product)
+      if (existItem) {
         setCart(cart.map(x => x.product === existItem.product ? item : x))
       } else {
         setCart([...cart, item])
       }
       localStorage.setItem('cartItems', JSON.stringify(cart))
       setLoadingAddToCart(false)
-      console.log("cart", cart)
-    } catch(err) {
+      console.log('cart', cart)
+    } catch (err) {
       setErrorAddToCart(err)
-      console.log("ERROR_ADDTOCART", err)
+      console.log('ERROR_ADDTOCART', err)
     }
   }
 
   const removeFromCart = async (id) => {
-    setCart(cart.filter(({product}) => product !== id))
+    setCart(cart.filter(({ product }) => product !== id))
     localStorage.setItem('cartItems', JSON.stringify(cart))
   }
 
   return (
-    <CartContext.Provider value={{ 
+    <CartContext.Provider value={{
       addToCart,
       cart,
       cartItem,
@@ -56,9 +55,10 @@ export default ({ children }) => {
       removeFromCart,
       setPaymentMethod,
       setShippingAddress,
-      shippingAddress 
-    }}>
+      shippingAddress
+    }}
+    >
       {children}
     </CartContext.Provider>
   )
-};
+}

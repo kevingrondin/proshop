@@ -1,11 +1,11 @@
-import React from "react"
-import { Helmet } from "react-helmet"
+import React from 'react'
+import { Helmet } from 'react-helmet'
 
-const Meta = ({title, description, keywords}) => (
+const Meta = ({ title, description, keywords }) => (
   <Helmet>
     <title>{title}</title>
-    <meta name="description" content={description} />
-    <meta name="keywork" content={keywords} /> 
+    <meta name='description' content={description} />
+    <meta name='keywork' content={keywords} />
   </Helmet>
 )
 

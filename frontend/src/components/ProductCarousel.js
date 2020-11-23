@@ -4,7 +4,7 @@ import { Carousel, Image } from 'react-bootstrap'
 import Loader from './Loader'
 import Message from './Message'
 
-import { ProductContext } from "../context/ProductContext"
+import { ProductContext } from '../context/ProductContext'
 
 const ProductCarousel = () => {
   const { errorTopProducts, loadingTopProducts, topProducts, getTopProducts } = useContext(ProductContext)

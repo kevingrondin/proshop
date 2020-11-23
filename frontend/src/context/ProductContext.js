@@ -1,4 +1,4 @@
-import React, { createContext, useState} from "react"
+import React, { createContext, useState } from 'react'
 // import { UserContext } from "../context/UserContext"
 
 export const ProductContext = createContext(null)
@@ -6,59 +6,59 @@ export const ProductContext = createContext(null)
 export default ({ children }) => {
   // const {user } = useContext(UserContext)
 
-  const [ errorProductDetail, setErrorProductDetail ] = useState(null)
-  const [ errorProducts, setErrorProducts ] = useState(null)
-  const [ errorTopProducts, setErrorTopProducts ] = useState(null)
+  const [errorProductDetail, setErrorProductDetail] = useState(null)
+  const [errorProducts, setErrorProducts] = useState(null)
+  const [errorTopProducts, setErrorTopProducts] = useState(null)
 
-  const [ loadingProductDetail, setLoadingProductDetail ] = useState(true)
-  const [ loadingProducts, setLoadingProducts ] = useState(true)
-  const [ loadingTopProducts, setLoadingTopProducts ] = useState(true)
+  const [loadingProductDetail, setLoadingProductDetail] = useState(true)
+  const [loadingProducts, setLoadingProducts] = useState(true)
+  const [loadingTopProducts, setLoadingTopProducts] = useState(true)
 
-  const [ page, setPage ] = useState('')
-  const [ pages, setPages ] = useState('')
+  const [page, setPage] = useState('')
+  const [pages, setPages] = useState('')
 
-  const [ productDetail, setProductDetail] = useState([])
-  const [ products, setProducts ] = useState([])
-  const [ topProducts, setTopProducts ] = useState([])
+  const [productDetail, setProductDetail] = useState([])
+  const [products, setProducts] = useState([])
+  const [topProducts, setTopProducts] = useState([])
 
   const getProductById = async (id) => {
     try {
       setLoadingProductDetail(true)
-      let response = await fetch(`/api/products/${id}`)
-      let data = await response.json()
+      const response = await fetch(`/api/products/${id}`)
+      const data = await response.json()
       setProductDetail(data)
       setLoadingProductDetail(false)
-    } catch(err) {
+    } catch (err) {
       setErrorProductDetail(err)
-      console.log("ERROR_GET_PRODUCTDETAIL", err)
+      console.log('ERROR_GET_PRODUCTDETAIL', err)
     }
   }
 
   const getProducts = async (keyword = '', pageNumber = '') => {
     try {
       setLoadingProducts(true)
-      let response = await fetch(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)
-      let data = await response.json()
+      const response = await fetch(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)
+      const data = await response.json()
       setProducts(data.products)
       setPages(data.pages)
       setPage(data.page)
       setLoadingProducts(false)
-    } catch(err) {
+    } catch (err) {
       setErrorProducts(err)
-      console.log("ERROR_GET_PRODUCT", err)
+      console.log('ERROR_GET_PRODUCT', err)
     }
   }
 
   const getTopProducts = async () => {
     try {
       setLoadingTopProducts(true)
-      let response = await fetch(`/api/products/top`)
-      let data = await response.json()
+      const response = await fetch('/api/products/top')
+      const data = await response.json()
       setTopProducts(data)
       setLoadingTopProducts(false)
-    } catch(err) {
+    } catch (err) {
       setErrorTopProducts(err)
-      console.log("ERROR_GET_TOP_PRODUCT", err)
+      console.log('ERROR_GET_TOP_PRODUCT', err)
     }
   }
 
@@ -73,14 +73,14 @@ export default ({ children }) => {
   // }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <ProductContext.Provider 
+    <ProductContext.Provider
       value={{
         errorProductDetail,
-        errorProducts, 
+        errorProducts,
         errorTopProducts,
         getProductById,
         getProducts,
-        getTopProducts, 
+        getTopProducts,
         loadingProductDetail,
         loadingProducts,
         loadingTopProducts,
@@ -89,8 +89,9 @@ export default ({ children }) => {
         productDetail,
         products,
         topProducts
-      }}>
+      }}
+    >
       {children}
     </ProductContext.Provider>
   )
-};
+}

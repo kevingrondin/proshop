@@ -5,40 +5,38 @@ import FormContainer from '../components/FormContainer'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 
-import { UserContext } from "../context/UserContext"
+import { UserContext } from '../context/UserContext'
 
 // const useQuery = () => new URLSearchParams(useLocation().search)
 
-const LoginScreen  = () => {
+const LoginScreen = () => {
   const navigate = useNavigate()
   const location = useLocation()
   // const query = useQuery()
-  const { errorRegisterUser, login, loadingLoginUser, user} = useContext(UserContext)
+  const { errorRegisterUser, login, loadingLoginUser, user } = useContext(UserContext)
   const [credentials, setCredentials] = useState({
     email: location?.state?.email ?? 'kevingrondin@outlook.com',
     password: ''
   })
 
   const handleChange = ({ currentTarget }) => {
-    const { name, value } = currentTarget;
-    setCredentials({...credentials, [name]: value})
+    const { name, value } = currentTarget
+    setCredentials({ ...credentials, [name]: value })
   }
 
   useEffect(() => {
-    if(user && location?.state?.redirect)
-      navigate(String(location?.state?.redirect))
-    if(user && !location?.state?.redirect)
-      navigate('/', { replace: true })
+    if (user && location?.state?.redirect) { navigate(String(location?.state?.redirect)) }
+    if (user && !location?.state?.redirect) { navigate('/', { replace: true }) }
   }, [user, location]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const _redirectRegisterWithEmail = () => 
-    navigate("/register", { state: { email: credentials?.email }})
+  const _redirectRegisterWithEmail = () =>
+    navigate('/register', { state: { email: credentials?.email } })
 
   const submitHandler = (e) => {
     e.preventDefault()
     try {
       login(credentials)
-    }catch(err) {
+    } catch (err) {
       _redirectRegisterWithEmail()
     }
   }
@@ -56,8 +54,8 @@ const LoginScreen  = () => {
             name='email'
             placeholder='Enter email'
             value={credentials.email}
-            onChange={handleChange}>  
-          </Form.Control>
+            onChange={handleChange}
+          />
         </Form.Group>
         <Form.Group controlId='password'>
           <Form.Label>Password</Form.Label>
@@ -66,8 +64,8 @@ const LoginScreen  = () => {
             name='password'
             placeholder='Enter password'
             value={credentials.password}
-            onChange={handleChange}>  
-          </Form.Control>
+            onChange={handleChange}
+          />
         </Form.Group>
         <Button type='submit' variant='primary'>
           Sign In
@@ -76,10 +74,11 @@ const LoginScreen  = () => {
 
       <Row className='py-3'>
         <Col>
-         <Button
-          onClick={ () =>_redirectRegisterWithEmail()}>
+          <Button
+            onClick={() => _redirectRegisterWithEmail()}
+          >
             New Customer?
-         </Button>
+          </Button>
         </Col>
       </Row>
     </FormContainer>

@@ -1,17 +1,17 @@
 import React, { useContext, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+
 import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
 import Message from '../components/Message'
 import CheckoutSteps from '../components/CheckoutSteps'
 
-import { CartContext } from "../context/CartContext"
-import { OrderContext } from "../context/OrderContext"
+import { CartContext } from '../context/CartContext'
+import { OrderContext } from '../context/OrderContext'
 
 const PlaceOrderPage = () => {
   const navigate = useNavigate()
   const { cart, shippingAddress, paymentMethod } = useContext(CartContext)
-  const { createOrder, order,  } = useContext(OrderContext)
+  const { createOrder, order } = useContext(OrderContext)
   //   Calculate prices
   const addDecimals = (num) => (Math.round(num * 100) / 100).toFixed(2)
 
@@ -35,13 +35,13 @@ const PlaceOrderPage = () => {
 
   const placeOrderHandler = () => {
     createOrder({
-        orderItems: cart,
-        shippingAddress,
-        paymentMethod,
-        itemsPrice: cart.itemsPrice,
-        shippingPrice: cart.shippingPrice,
-        taxPrice: cart.taxPrice,
-        totalPrice: cart.totalPrice,
+      orderItems: cart,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice: cart.itemsPrice,
+      shippingPrice: cart.shippingPrice,
+      taxPrice: cart.taxPrice,
+      totalPrice: cart.totalPrice
     })
   }
 

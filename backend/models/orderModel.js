@@ -8,23 +8,23 @@ const orderSchema = mongoose.Schema(
       ref: 'User'
     },
     orderItems: [
-      { 
+      {
         name: { type: String, required: true },
         qty: { type: String, required: true },
         image: { type: String, required: true },
         price: { type: String, required: true },
-        product: { 
+        product: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
-          ref: 'Product' 
-        },
-      },
+          ref: 'Product'
+        }
+      }
     ],
-    shippingAdress: { 
+    shippingAdress: {
       adress: { type: String, required: true },
       city: { type: String, required: true },
       postaleCode: { type: String, required: true },
-      country: { type: String, required: true},
+      country: { type: String, required: true }
     },
     paymentMethod: { type: String, required: true },
     paymentResult: {
@@ -36,12 +36,12 @@ const orderSchema = mongoose.Schema(
     itemsPrice: {
       type: Number,
       required: true,
-      default: 0.0,
+      default: 0.0
     },
     taxPrice: {
       type: Number,
       required: true,
-      default: 0.0,
+      default: 0.0
     },
     ShippingPrice: {
       type: Number,
@@ -56,7 +56,7 @@ const orderSchema = mongoose.Schema(
     isPaid: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
     paidAt: { type: Date },
     isDelivered: {
@@ -64,7 +64,7 @@ const orderSchema = mongoose.Schema(
       required: true,
       default: false
     },
-    deliveredAt: { type: Date },
+    deliveredAt: { type: Date }
   },
   {
     timestamps: true

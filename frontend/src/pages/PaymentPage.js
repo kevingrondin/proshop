@@ -4,7 +4,7 @@ import { Form, Button, Col } from 'react-bootstrap'
 import FormContainer from '../components/FormContainer'
 import CheckoutSteps from '../components/CheckoutSteps'
 
-import { CartContext } from "../context/CartContext"
+import { CartContext } from '../context/CartContext'
 
 const PaymentPage = () => {
   const navigate = useNavigate()
@@ -41,7 +41,7 @@ const PaymentPage = () => {
               value='PayPal'
               checked
               onChange={(e) => setPayment(e.target.value)}
-            ></Form.Check>
+            />
             <Form.Check
               type='radio'
               label='Stripe'
@@ -49,7 +49,7 @@ const PaymentPage = () => {
               name='paymentMethod'
               value='Stripe'
               onChange={(e) => setPayment(e.target.value)}
-            ></Form.Check>
+            />
           </Col>
         </Form.Group>
 

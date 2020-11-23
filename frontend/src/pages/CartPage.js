@@ -1,9 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useLocation, useParams, useNavigate } from 'react-router-dom'
 import { Row, Col, ListGroup, Image, Form, Button, Card } from 'react-bootstrap'
 import Message from '../components/Message'
 
-import { CartContext } from "../context/CartContext"
+import { CartContext } from '../context/CartContext'
 
 const useQuery = () => new URLSearchParams(useLocation().search)
 
@@ -23,11 +23,11 @@ const CartPage = () => {
     }
   }, [productId, qty]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const removeFromCartHandler = (id) => 
+  const removeFromCartHandler = (id) =>
     removeFromCart(id)
 
-  const checkoutHandler = () => 
-    navigate("/login", { state: { redirect: '/shipping' }})
+  const checkoutHandler = () =>
+    navigate('/login', { state: { redirect: '/shipping' } })
     // navigate("/login?redirect=shipping")
 
   return (
@@ -54,7 +54,7 @@ const CartPage = () => {
                     <Form.Control
                       as='select'
                       value={item.qty}
-                      onChange={(e) => addToCart(item.product, +e.target.value) }
+                      onChange={(e) => addToCart(item.product, +e.target.value)}
                     >
                       {[...Array(item.countInStock).keys()].map((x) => (
                         <option key={x + 1} value={x + 1}>
@@ -69,7 +69,7 @@ const CartPage = () => {
                       variant='light'
                       onClick={() => removeFromCartHandler(item.product)}
                     >
-                      <i className='fas fa-trash'></i>
+                      <i className='fas fa-trash' />
                     </Button>
                   </Col>
                 </Row>

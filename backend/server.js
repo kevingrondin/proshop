@@ -15,7 +15,7 @@ connectDB()
 
 const app = express()
 
-if(process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 app.use(express.json())
@@ -24,11 +24,8 @@ app.use('/api/products', productRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
 
-app.get("/", (req, res) => res.send('API running'))
+app.get('/', (req, res) => res.send('API running'))
 
 const PORT = process.env.PORT || 5000
 
 app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} on ${PORT}`.yellow.bold))
-
-
-

@@ -5,7 +5,7 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
 
-import { UserContext } from "../context/UserContext"
+import { UserContext } from '../context/UserContext'
 
 const RegisterPage = () => {
   const navigate = useNavigate()
@@ -22,32 +22,29 @@ const RegisterPage = () => {
   })
 
   const handleChange = ({ currentTarget }) => {
-    const { name, value } = currentTarget;
-    setCredentials({...credentials, [name]: value})
+    const { name, value } = currentTarget
+    setCredentials({ ...credentials, [name]: value })
   }
 
   useEffect(() => {
-    if (user)
-      navigate('/')
+    if (user) { navigate('/') }
   }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (errorRegisterUser === 'utilisateur déja connu')
-      navigate('/login', { state: { email: credentials.email }})
+    if (errorRegisterUser === 'utilisateur déja connu') { navigate('/login', { state: { email: credentials.email } }) }
   }, [errorRegisterUser]) // eslint-disable-line react-hooks/exhaustive-deps
-
 
   const submitHandler = (e) => {
     e.preventDefault()
     try {
       if (credentials.password === credentials.confirmPassword) {
         register({
-          name : credentials.name, 
-          email : credentials.email, 
-          password : credentials.password
+          name: credentials.name,
+          email: credentials.email,
+          password: credentials.password
         })
       }
-    }catch(err) {
+    } catch (err) {
       console.log(err)
     }
   }
@@ -67,7 +64,7 @@ const RegisterPage = () => {
             placeholder='Enter name'
             value={credentials.name}
             onChange={handleChange}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId='email'>
@@ -78,7 +75,7 @@ const RegisterPage = () => {
             placeholder='Enter email'
             value={credentials.email}
             onChange={handleChange}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId='password'>
@@ -89,7 +86,7 @@ const RegisterPage = () => {
             placeholder='Enter password'
             value={credentials.password}
             onChange={handleChange}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId='confirmPassword'>
@@ -100,7 +97,7 @@ const RegisterPage = () => {
             placeholder='Confirm password'
             value={credentials.confirmPassword}
             onChange={handleChange}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Button type='submit' variant='primary'>
