@@ -5,25 +5,38 @@ import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
+import { QueryClient, QueryClientProvider } from "react-query";
+
 import CartContextProvider from './context/CartContext'
 import OrderContextProvider from './context/OrderContext'
 import ProductContextProvider from './context/ProductContext'
 import UserContextProvider from './context/UserContext'
 
+const queryClient = new QueryClient()
+
 ReactDOM.render(
   <React.StrictMode>
-    <UserContextProvider>
-      <OrderContextProvider>
-        <ProductContextProvider>
-          <CartContextProvider>
-            <App />
-          </CartContextProvider>
-        </ProductContextProvider>
-      </OrderContextProvider>
-    </UserContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById('root')
-)
+);
+
+// ReactDOM.render(
+//   <React.StrictMode>
+//     <UserContextProvider>
+//       <OrderContextProvider>
+//         <ProductContextProvider>
+//           <CartContextProvider>
+//             <App />
+//           </CartContextProvider>
+//         </ProductContextProvider>
+//       </OrderContextProvider>
+//     </UserContextProvider>
+//   </React.StrictMode>,
+//   document.getElementById('root')
+// )
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
